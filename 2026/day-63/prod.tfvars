@@ -1,0 +1,5 @@
+project_id   = "project-ef8fde2b-4dce-45eb-9ac"
+project_name = "My-First-Project"
+environment  = "prod"
+machine_type = "e2-small"
+subnet_cidr  = "10.1.1.0/24"
