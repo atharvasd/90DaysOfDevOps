@@ -163,6 +163,7 @@ kubectl apply -f nginx-pod.yaml --dry-run=server
 Now intentionally break your YAML (remove the `image` field or add an invalid field) and run dry-run again. See what error you get.
 
 **Verify:** What error does Kubernetes give when the image field is missing?
+The request is invalid: patch: Invalid value: "map[metadata:map[annotations:map[kubectl.kubernetes.io/last-applied-configuration:{\"apiVersion\":\"v1\",\"kind\":\"Pod\",\"metadata\":{\"annotations\":{},\"labels\":{\"app\":\"nginx\"},\"name\":\"nginx-pod\",\"namespace\":\"default\"},\"spec\":{\"containers\":[{\"img\":\"asd1\",\"name\":\"nginx-app1\",\"ports\":[{\"containerPort\":80}]}]}}\n]] spec:map[]]": strict decoding error: unknown field "spec.containers[0].img"
 
 ---
 
