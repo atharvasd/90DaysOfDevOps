@@ -67,3 +67,8 @@ locals {
   }
 }
 
+resource "google_storage_bucket" "logs_bucket" {
+  name     = "terraweek-import-test-atharvasd"
+  location = "ASIA-SOUTH1"
+}
+

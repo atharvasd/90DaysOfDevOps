@@ -5,6 +5,10 @@ terraform {
       version = "~>5.0"
     }
   }
+  backend "gcs" {
+    bucket = "terraweek-state-tws-bucket"
+    prefix = "dev/terraform.tfstate"
+  }
 }
 
 provider "google" {
@@ -12,4 +16,5 @@ provider "google" {
   # region  = "asia-south1"
   project = var.project_id
   region  = var.region
+
 }
