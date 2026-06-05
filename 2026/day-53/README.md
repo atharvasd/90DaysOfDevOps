@@ -64,8 +64,15 @@ spec:
 kubectl apply -f app-deployment.yaml
 kubectl get pods -o wide
 ```
+atharva@MacBookAir day-53 % kubectl get pods -o wide            
+NAME                       READY   STATUS    RESTARTS   AGE   IP            NODE                           NOMINATED NODE   READINESS GATES
+web-app-6cffb4b956-5t66f   1/1     Running   0          48s   10.244.0.35   devops-cluster-control-plane   <none>           <none>
+web-app-6cffb4b956-9cwb8   1/1     Running   0          48s   10.244.0.37   devops-cluster-control-plane   <none>           <none>
+web-app-6cffb4b956-pxk6v   1/1     Running   0          48s   10.244.0.36   devops-cluster-control-plane   <none>           <none>
+
 
 Note the individual Pod IPs. These will change if pods restart — that is the problem Services fix.
+
 
 **Verify:** Are all 3 pods running? Note down their IP addresses.
 
