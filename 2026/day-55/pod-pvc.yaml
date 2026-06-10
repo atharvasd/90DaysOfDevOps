@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-pvc
+spec:
+  containers:
+    - name: writer
+      image: busybox:latest
+      command:
+        [
+          "sh",
+          "-c",
+          'echo "Hello, this was written from pod-pvc at $(date)" >> /data/message.txt && sleep 3600',
+        ]
+      volumeMounts:
+        - name: persistent-storage
+          mountPath: /data
+  volumes:
+    - name: persistent-storage
+      persistentVolumeClaim:
+        claimName: local-pvc

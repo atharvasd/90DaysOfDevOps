@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ephemeral-pod
+spec:
+  containers:
+    - name: writer
+      image: busybox:latest
+      command:
+        [
+          "sh",
+          "-c",
+          'echo "Hello, this was written at $(date)" > /data/message.txt && sleep 3600',
+        ]
+      volumeMounts:
+        - name: ephemeral-storage
+          mountPath: /data
+  volumes:
+    - name: ephemeral-storage
+      emptyDir: {}
