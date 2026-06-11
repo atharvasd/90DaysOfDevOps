@@ -79,25 +79,25 @@ A day-by-day index of the complete 90-day DevOps challenge. Click any day to jum
 
 ## Kubernetes (Days 50-60)
 
-- [ ] **[Day 50](day-50/)** — Kubernetes Architecture and Cluster Setup
-- [ ] **[Day 51](day-51/)** — Kubernetes Manifests and Your First Pods
-- [ ] **[Day 52](day-52/)** — Kubernetes Namespaces and Deployments
-- [ ] **[Day 53](day-53/)** — Kubernetes Services
-- [ ] **[Day 54](day-54/)** — Kubernetes ConfigMaps and Secrets
-- [ ] **[Day 55](day-55/)** — Persistent Volumes (PV) and Persistent Volume Claims (PVC)
-- [ ] **[Day 56](day-56/)** — Kubernetes StatefulSets
-- [ ] **[Day 57](day-57/)** — Resource Requests, Limits, and Probes
-- [ ] **[Day 58](day-58/)** — Metrics Server and Horizontal Pod Autoscaler (HPA)
+- [x] **[Day 50](day-50/)** — Kubernetes Architecture and Cluster Setup
+- [x] **[Day 51](day-51/)** — Kubernetes Manifests and Your First Pods
+- [x] **[Day 52](day-52/)** — Kubernetes Namespaces and Deployments
+- [x] **[Day 53](day-53/)** — Kubernetes Services
+- [x] **[Day 54](day-54/)** — Kubernetes ConfigMaps and Secrets
+- [x] **[Day 55](day-55/)** — Persistent Volumes (PV) and Persistent Volume Claims (PVC)
+- [x] **[Day 56](day-56/)** — Kubernetes StatefulSets
+- [x] **[Day 57](day-57/)** — Resource Requests, Limits, and Probes
+- [x] **[Day 58](day-58/)** — Metrics Server and Horizontal Pod Autoscaler (HPA)
 - [ ] **[Day 59](day-59/)** — Helm -- Kubernetes Package Manager
 - [ ] **[Day 60](day-60/)** — Capstone: Deploy WordPress + MySQL on Kubernetes
 - [ ] **[Advanced](kubernetes-advanced/)** — **Advanced Kubernetes & Security Best Practices** (DaemonSets, Jobs, CronJobs, Security Hardening)
 
 ## TerraWeek -- Terraform (Days 61-67)
 
-- [ ] **[Day 61](day-61/)** — Introduction to Terraform and Your First AWS Infrastructure
-- [ ] **[Day 62](day-62/)** — Providers, Resources and Dependencies
-- [ ] **[Day 63](day-63/)** — Variables, Outputs, Data Sources and Expressions
-- [ ] **[Day 64](day-64/)** — Terraform State Management and Remote Backends
+- [x] **[Day 61](day-61/)** — Introduction to Terraform and Your First AWS Infrastructure
+- [x] **[Day 62](day-62/)** — Providers, Resources and Dependencies
+- [x] **[Day 63](day-63/)** — Variables, Outputs, Data Sources and Expressions
+- [x] **[Day 64](day-64/)** — Terraform State Management and Remote Backends
 - [ ] **[Day 65](day-65/)** — Terraform Modules: Build Reusable Infrastructure
 - [ ] **[Day 66](day-66/)** — Provision an EKS Cluster with Terraform Modules
 - [ ] **[Day 67](day-67/)** — TerraWeek Capstone: Multi-Environment Infrastructure with Workspaces and Modules
