@@ -91,7 +91,7 @@ terraform {
 
 ### Migration steps
 1. Created GCS bucket: `gcloud storage buckets create gs://terraweek-state-tws-bucket --location=asia-south1`
-2. Enabled versioning: `gsutil versioning set on gs://terraweek-state-tws-bucket`
+2. Enabled versioning: `gcloud storage buckets update gs://terraweek-state-tws-bucket --versioning`
 3. Added backend block to `providers.tf`
 4. Ran `terraform init` → answered **yes** to copy state
 5. Verified with `terraform plan` → **No changes** (migration successful)
