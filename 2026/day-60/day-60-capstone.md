@@ -45,4 +45,15 @@ kubectl exec -it mysql-statefull-set-0 -n capstone -- mysql -u phoenix1 -p'user#
 **Verification:** Successfully connected to the pod and verified the `capstone-db` was initialized on the Persistent Volume.
 
 ### Task 3: Deploy WordPress
+**Commands Executed:**
+```bash
+# Apply the frontend configuration and deployment
+kubectl apply -f 04-wordpress-configmap.yaml
+kubectl apply -f 05-wordpress-deployment.yaml
+
+# Monitor the WordPress pods as they boot up and run their initialization scripts
+kubectl get pods -n capstone -w
+```
+
+### Task 4: Expose WordPress
 *(Waiting for your commands...)*

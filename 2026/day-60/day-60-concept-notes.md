@@ -25,6 +25,25 @@ In a real production environment, you **never** commit a plain `secret.yaml`. In
 
 *For this Capstone project, since it is a learning lab, you can just use dummy passwords (like `admin123`) or add your `01-mysql-secret.yaml` file to your `.gitignore` so it never gets pushed to GitHub.*
 
+---
+
+## 📝 Task 3: Deploying WordPress (Deployments & Probes)
+
+### Why use a ConfigMap instead of just hardcoding the DB URL?
+A ConfigMap decouples configuration from your code. If you decide to move your database to AWS RDS later, you don't have to rewrite your Deployment YAML or rebuild your Docker image. You just update the ConfigMap, and WordPress instantly connects to the new database!
+
+### `envFrom` vs `env` (Secret Mapping)
+- **`envFrom`** is a shortcut that dumps every single variable inside a ConfigMap directly into the container.
+- **`env`** allows you to explicitly map variables. We had to use this for the Secret because our Secret contained `MYSQL_USER`, but the WordPress container was hardcoded to look for `WORDPRESS_DB_USER`. By using `env` and `valueFrom.secretKeyRef`, we essentially acted as a translator between our backend and our frontend.
+
+### Why do we need BOTH Liveness and Readiness Probes?
+They sound similar, but they do two completely different jobs:
+1. **Liveness Probe (The Medic):** It constantly pings `/wp-login.php`. If it gets an error (like a 500 Internal Server Error because PHP crashed), it literally kills the container and restarts it. It is your automatic self-healing mechanism.
+2. **Readiness Probe (The Traffic Cop):** When a pod first boots up, it takes about 20 seconds for Apache and PHP to start. If the Kubernetes Service immediately sends user traffic to it, users will see a "Connection Refused" error. The Readiness Probe checks `/wp-login.php`, and *only* allows the Service to send user traffic to the pod once the probe gets a successful 200 OK HTTP response.
+
+### Why did we add `initialDelaySeconds: 30`?
+Without this delay, Kubernetes would check the Liveness probe at exactly second #1. WordPress wouldn't be booted yet, so the probe would fail. Kubernetes would kill the pod and restart it. Second #1 hits again, it fails again, and it restarts again. You end up in an infinite `CrashLoopBackOff`. The delay gives the container 30 seconds of "grace period" to start up before the medic starts checking its pulse!
+
 
 ### Why do we need a Headless Service (`clusterIP: None`)?
 Databases are "Stateful" (they hold unique data), and normal Services are designed for "Stateless" apps (like web servers). 
