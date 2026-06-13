@@ -25,6 +25,20 @@ In a real production environment, you **never** commit a plain `secret.yaml`. In
 
 *For this Capstone project, since it is a learning lab, you can just use dummy passwords (like `admin123`) or add your `01-mysql-secret.yaml` file to your `.gitignore` so it never gets pushed to GitHub.*
 
+### Why do we need a Headless Service (`clusterIP: None`)?
+Databases are "Stateful" (they hold unique data), and normal Services are designed for "Stateless" apps (like web servers). 
+- A normal Service acts like a Load Balancer and gets its own IP address, distributing traffic randomly to pods. You cannot send a "WRITE" command to a random database pod (like a read-replica), or your data will corrupt.
+- A **Headless Service** does *not* act as a load balancer and does *not* get an IP address. Instead, it creates a specific, permanent DNS URL for *every single individual pod* in the StatefulSet (e.g., `mysql-0.mysql.capstone.svc.cluster.local`). This allows WordPress to reliably target the exact primary database pod.
+
+### What happens when the Master Pod (`mysql-0`) crashes?
+If you used a normal Deployment, Kubernetes would spin up a new pod with a random name (like `mysql-8f7b5`) and it would start with a blank hard drive. All data would be lost.
+
+Because we use a **StatefulSet + Headless Service**:
+1. **The Data Survives:** The database files are stored on a Persistent Volume (PVC), which is strictly bound to the name `mysql-0`.
+2. **Predictable Resurrection:** The StatefulSet spins up a brand new pod and forces it to have the exact same name: `mysql-0`.
+3. **Reattaching the Hard Drive:** Because the new pod is named `mysql-0`, Kubernetes automatically reattaches the exact same Persistent Volume. All old data is perfectly intact.
+4. **DNS Recovers Instantly:** The Headless Service detects the new pod, updates the DNS, and the traffic instantly routes to the new IP address. WordPress reconnects, and zero data is lost.
+
 ---
 
 ## 📝 Task 3: Deploying WordPress (Deployments & Probes)
@@ -44,17 +58,15 @@ They sound similar, but they do two completely different jobs:
 ### Why did we add `initialDelaySeconds: 30`?
 Without this delay, Kubernetes would check the Liveness probe at exactly second #1. WordPress wouldn't be booted yet, so the probe would fail. Kubernetes would kill the pod and restart it. Second #1 hits again, it fails again, and it restarts again. You end up in an infinite `CrashLoopBackOff`. The delay gives the container 30 seconds of "grace period" to start up before the medic starts checking its pulse!
 
+---
 
-### Why do we need a Headless Service (`clusterIP: None`)?
-Databases are "Stateful" (they hold unique data), and normal Services are designed for "Stateless" apps (like web servers). 
-- A normal Service acts like a Load Balancer and gets its own IP address, distributing traffic randomly to pods. You cannot send a "WRITE" command to a random database pod (like a read-replica), or your data will corrupt.
-- A **Headless Service** does *not* act as a load balancer and does *not* get an IP address. Instead, it creates a specific, permanent DNS URL for *every single individual pod* in the StatefulSet (e.g., `mysql-0.mysql.capstone.svc.cluster.local`). This allows WordPress to reliably target the exact primary database pod.
+## 📝 Task 4: Exposing WordPress (Services)
 
-### What happens when the Master Pod (`mysql-0`) crashes?
-If you used a normal Deployment, Kubernetes would spin up a new pod with a random name (like `mysql-8f7b5`) and it would start with a blank hard drive. All data would be lost.
+### Why did we use a `NodePort` Service?
+Kubernetes has three main types of Services for routing traffic:
+1. **ClusterIP (Default):** This gives the service an internal IP address. It is strictly for backend-to-backend communication (like how WordPress talks to MySQL). If we used a ClusterIP for WordPress, you wouldn't be able to open it in your laptop's web browser because it's locked inside the cluster firewall.
+2. **NodePort:** This tells Kubernetes: *"Take a port (like `30080`) and punch a hole through the physical server's firewall. Anyone who hits the physical server on `30080` gets forwarded to this pod."* This is the easiest way to access an application from outside the cluster during local development.
+3. **LoadBalancer:** This is the standard for Cloud Production (AWS/GCP). It tells AWS to literally provision a physical load balancer with a public IP address. Since we are running locally on a laptop, a LoadBalancer usually doesn't work out-of-the-box (it just hangs in "Pending" state).
 
-Because we use a **StatefulSet + Headless Service**:
-1. **The Data Survives:** The database files are stored on a Persistent Volume (PVC), which is strictly bound to the name `mysql-0`.
-2. **Predictable Resurrection:** The StatefulSet spins up a brand new pod and forces it to have the exact same name: `mysql-0`.
-3. **Reattaching the Hard Drive:** Because the new pod is named `mysql-0`, Kubernetes automatically reattaches the exact same Persistent Volume. All old data is perfectly intact.
-4. **DNS Recovers Instantly:** The Headless Service detects the new pod, updates the DNS, and the traffic instantly routes to the new IP address. WordPress reconnects, and zero data is lost.
+
+

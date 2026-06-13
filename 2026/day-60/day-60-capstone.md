@@ -56,4 +56,30 @@ kubectl get pods -n capstone -w
 ```
 
 ### Task 4: Expose WordPress
+**Commands Executed:**
+```bash
+# Apply the NodePort Service
+kubectl apply -f 06-wordpress-nodeport-svc.yaml
+
+# Verify the service is running
+kubectl get svc -n capstone
+
+# Since we are using KIND (Kubernetes in Docker), we use port-forwarding to bypass the Docker network and access it on localhost
+kubectl port-forward svc/wordpress 30080:80 -n capstone
+```
+
+**Verification:** Access the frontend at `http://localhost:30080` to view the WordPress installation screen!
+
+### Task 5: Test Self-Healing and Persistence
+**Commands Executed:**
+```bash
+# Intentionally delete the MySQL master pod to test resilience
+kubectl delete pod mysql-0 -n capstone
+
+# Watch Kubernetes automatically recreate it
+kubectl get pods -n capstone -w
+```
+**Verification:** The `mysql-0` pod was recreated, automatically reattached to the Persistent Volume, and the WordPress site recovered with zero data loss!
+
+### Task 6: Set Up HPA (Horizontal Pod Autoscaling)
 *(Waiting for your commands...)*
