@@ -80,3 +80,17 @@ In the real world, you do not just guess these numbers! Here is the methodology:
 2. **The HPA Math:** If we request `250m`, the HPA "50%" target means the HPA will scale up as soon as the pod hits `125m` of CPU usage. If we had requested a massive `1000m` (1 full core), the pod would have to get hit with enough traffic to reach `500m` of CPU before the HPA triggers, which might be too late to save the website! Setting a lower, realistic baseline ensures it scales quickly.
 3. **Continuous Monitoring:** In production, you deploy with a baseline, and then you use monitoring tools (like Prometheus or Grafana) to watch the actual usage over a week. If WordPress never goes above `100m`, you lower your request to save money on cloud bills. (There is even a Kubernetes tool called VPA—Vertical Pod Autoscaler—that watches your pods and literally tells you what the numbers should be!).
 
+---
+
+## 📝 Task 7: Helm (The Package Manager)
+
+### What is Helm and why do we need it?
+Helm is a package manager for Kubernetes (exactly like `brew` for Mac, `apt` for Linux, or `npm` for Node.js). 
+
+Think about the Capstone project you just built. To install one single application (WordPress), you had to manually write and manage 7 different YAML files (Namespace, Secret, ConfigMap, StatefulSet, Deployment, Headless Service, NodePort Service, HPA). 
+
+Now imagine you want to install a massive enterprise tool like Prometheus (for monitoring) or GitLab. That could require writing over **50+ YAML files**! 
+
+Helm solves this by bundling all of those YAML files into a single zip-like folder called a **"Chart"**.
+Instead of writing 50 files, you simply type `helm install bitnami/wordpress`. Helm downloads the Chart, automatically generates all the Deployments, Services, and Secrets, and applies them to your cluster instantly. It takes hours of manual YAML writing and turns it into a 5-second command.
+

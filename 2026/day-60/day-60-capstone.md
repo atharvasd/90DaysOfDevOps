@@ -5,7 +5,10 @@ This document serves as the step-by-step lab notebook and architecture documenta
 ---
 
 ## 🏗️ Architecture Overview
-*To be completed after deployment.*
+- **Database Tier:** A `mysql:8.0` container managed by a `StatefulSet`, bound to a `PersistentVolumeClaim` to ensure data persists across crashes. It securely pulls credentials from a `Secret` and is exposed internally via a `Headless Service` to maintain stable DNS (`mysql-0.mysql.capstone.svc.cluster.local`).
+- **Frontend Tier:** Two `wordpress:latest` replicas managed by a `Deployment`. They dynamically retrieve the DB connection string from a `ConfigMap` and the passwords from the `Secret`. They use `Liveness` and `Readiness` probes to ensure they don't serve traffic until fully booted.
+- **Autoscaling:** A `HorizontalPodAutoscaler` (HPA) monitors the frontend Deployment and scales it up to 10 replicas if CPU utilization exceeds 50%.
+- **Networking:** External users access the WordPress frontend through a `NodePort Service` exposed on port `30080`.
 
 ---
 
@@ -98,5 +101,51 @@ kubectl get hpa
 ```
 **Verification:** HPA is running and successfully registering CPU utilization (e.g., `2%/50%`).
 
+### Task 7: (Bonus) Compare with Helm
+**Commands Executed:**
+```bash
+# Create a test namespace and install the Bitnami WordPress chart
+kubectl create namespace helm-test
+helm install wp-helm bitnami/wordpress -n helm-test
+
+# Compare the generated resources to our manual capstone namespace
+kubectl get all -n helm-test
+```
+**Verification:** We observed that the Helm chart automatically generated the exact same architecture we built manually (StatefulSet for database, Deployment for frontend, Headless Services, etc.), proving how much time package managers save in production.
+
 ### Task 8: Clean Up and Reflect
-*(Waiting for your commands...)*
+**Commands Executed:**
+```bash
+# Nuke the entire test environment
+kubectl delete namespace helm-test
+kubectl delete namespace capstone
+```
+**Verification:** All resources were successfully deleted.
+
+---
+
+## 📚 Concepts Learned (Mapping)
+| Concept | Day Learned | Application in Capstone |
+|---------|-------------|--------------------------|
+| **Namespaces** | Day 52 | Isolated the entire application into the `capstone` namespace. |
+| **Deployments** | Day 52 | Managed the stateless WordPress frontend replicas. |
+| **Services (NodePort)** | Day 53 | Opened port `30080` to access the website from localhost. |
+| **Services (Headless)** | Day 53 | Provided stable internal DNS for the MySQL StatefulSet. |
+| **ConfigMaps** | Day 54 | Injected the database URL (`WORDPRESS_DB_HOST`) without hardcoding it. |
+| **Secrets** | Day 54 | Securely stored and injected `MYSQL_USER` and `MYSQL_PASSWORD`. |
+| **Persistent Volumes (PVC)**| Day 55 | Attached a virtual hard drive to MySQL so blog posts survive a crash. |
+| **StatefulSets** | Day 56 | Ensured MySQL retains its exact identity (`mysql-0`) and storage when recreating. |
+| **Probes** | Day 57 | Checked `/wp-login.php` to know exactly when the frontend was ready for traffic. |
+| **Resource Limits** | Day 58 | Capped the CPU/Memory so the pods don't crash the host node. |
+| **HPA** | Day 58 | Automatically scaled WordPress if CPU usage exceeded 50%. |
+| **Helm** | Day 59 | Proved how package managers can instantly generate this entire stack. |
+
+---
+
+## 🤔 Reflection
+- **What was hardest?** Figuring out the hidden traps! Understanding the difference between `envFrom` and `env` secret mapping, and learning that the HPA mathematically requires `resources.requests.cpu` in order to calculate scaling percentages.
+- **What clicked?** The power of StatefulSets combined with Headless Services. Intentionally deleting the database pod and watching it come back with the exact same name and all the data perfectly intact was the real "Aha!" moment.
+- **What to add for Production?** 
+  1. A `LoadBalancer` Service or an `Ingress` controller with SSL/TLS Certificates for HTTPS.
+  2. External Secret Managers (like HashiCorp Vault or AWS Secrets Manager) instead of using plain Kubernetes Secrets.
+  3. A managed database (like AWS RDS) instead of running a StatefulSet database inside the cluster.
