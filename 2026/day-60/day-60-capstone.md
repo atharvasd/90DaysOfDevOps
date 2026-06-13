@@ -82,4 +82,21 @@ kubectl get pods -n capstone -w
 **Verification:** The `mysql-0` pod was recreated, automatically reattached to the Persistent Volume, and the WordPress site recovered with zero data loss!
 
 ### Task 6: Set Up HPA (Horizontal Pod Autoscaling)
+**Commands Executed:**
+```bash
+# Apply the HPA manifest
+kubectl apply -f 07-wordpress-hpa.yaml
+
+# FIX: Install the Metrics Server (required for HPA to calculate CPU)
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+
+# FIX: Patch the Metrics Server to bypass KIND's local TLS certificates
+kubectl patch deployment metrics-server -n kube-system --type 'json' -p '[{"op": "add", "path": "/spec/template/spec/containers/0/args/-", "value": "--kubelet-insecure-tls"}]'
+
+# Verify the HPA is successfully calculating CPU utilization
+kubectl get hpa
+```
+**Verification:** HPA is running and successfully registering CPU utilization (e.g., `2%/50%`).
+
+### Task 8: Clean Up and Reflect
 *(Waiting for your commands...)*

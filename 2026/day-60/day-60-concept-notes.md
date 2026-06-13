@@ -68,5 +68,15 @@ Kubernetes has three main types of Services for routing traffic:
 2. **NodePort:** This tells Kubernetes: *"Take a port (like `30080`) and punch a hole through the physical server's firewall. Anyone who hits the physical server on `30080` gets forwarded to this pod."* This is the easiest way to access an application from outside the cluster during local development.
 3. **LoadBalancer:** This is the standard for Cloud Production (AWS/GCP). It tells AWS to literally provision a physical load balancer with a public IP address. Since we are running locally on a laptop, a LoadBalancer usually doesn't work out-of-the-box (it just hangs in "Pending" state).
 
+### Task 6: Horizontal Pod Autoscaler (HPA)
 
+### Why does the Deployment need `resources.requests` for the HPA to work?
+If you create an HPA that says "Scale up when CPU hits 50%", Kubernetes needs to do some math. It divides your *current* CPU usage by your *requested* CPU baseline.
+If you never defined a `requests.cpu` in your Deployment YAML, Kubernetes doesn't know what "100%" is! Because it has no baseline, it cannot mathematically calculate what 50% is. The HPA will show `<unknown>/50%` in the terminal and will **never** scale your pods. Therefore, CPU requests are absolutely mandatory for an HPA to function.
+
+### How do we calculate the requested resources (`cpu: 250m`)?
+In the real world, you do not just guess these numbers! Here is the methodology:
+1. **The Baseline Rule of Thumb:** For a standard Apache/PHP container like WordPress, `250m` (1/4 of a CPU core) and `256Mi` of RAM is the industry standard baseline for it to sit idle without throwing "Out of Memory" (OOMKilled) errors.
+2. **The HPA Math:** If we request `250m`, the HPA "50%" target means the HPA will scale up as soon as the pod hits `125m` of CPU usage. If we had requested a massive `1000m` (1 full core), the pod would have to get hit with enough traffic to reach `500m` of CPU before the HPA triggers, which might be too late to save the website! Setting a lower, realistic baseline ensures it scales quickly.
+3. **Continuous Monitoring:** In production, you deploy with a baseline, and then you use monitoring tools (like Prometheus or Grafana) to watch the actual usage over a week. If WordPress never goes above `100m`, you lower your request to save money on cloud bills. (There is even a Kubernetes tool called VPA—Vertical Pod Autoscaler—that watches your pods and literally tells you what the numbers should be!).
 
