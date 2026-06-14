@@ -5,6 +5,55 @@ This document serves as the step-by-step lab notebook and architecture documenta
 ---
 
 ## 🏗️ Architecture Overview
+
+```mermaid
+graph TD
+    User([External User]) -->|Port 30080| NodePort[Service: NodePort<br>wordpress]
+    
+    subgraph capstone[Namespace: capstone]
+        %% Frontend
+        NodePort --> WPDeploy[Deployment<br>wordpress]
+        
+        subgraph Frontend
+            WPDeploy --> WPPod1((WP Pod 1))
+            WPDeploy --> WPPod2((WP Pod 2))
+        end
+        
+        HPA[HPA<br>wordpress] -.->|Scales based on CPU| WPDeploy
+        
+        ConfigMap[ConfigMap<br>wordpress-config] -.->|DB_HOST| WPPod1
+        ConfigMap -.->|DB_HOST| WPPod2
+        
+        %% Database
+        WPPod1 -->|Port 3306| Headless[Service: Headless<br>mysql-headless]
+        WPPod2 -->|Port 3306| Headless
+        
+        Headless --> DBStateful[StatefulSet<br>mysql]
+        
+        subgraph Backend
+            DBStateful --> DBPod((MySQL Pod 0))
+        end
+        
+        Secret[Secret<br>mysql-auth] -.->|Passwords| WPPod1
+        Secret -.->|Passwords| WPPod2
+        Secret -.->|Passwords| DBPod
+        
+        DBPod --> PVC[(PersistentVolumeClaim<br>data-mysql-0)]
+    end
+    
+    classDef svc fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef deploy fill:#bbf,stroke:#333,stroke-width:2px;
+    classDef pod fill:#cfc,stroke:#333,stroke-width:2px;
+    classDef config fill:#fcf,stroke:#333,stroke-width:2px;
+    classDef storage fill:#ffc,stroke:#333,stroke-width:2px;
+    
+    class NodePort,Headless svc;
+    class WPDeploy,DBStateful deploy;
+    class WPPod1,WPPod2,DBPod pod;
+    class ConfigMap,Secret config;
+    class PVC storage;
+```
+
 - **Database Tier:** A `mysql:8.0` container managed by a `StatefulSet`, bound to a `PersistentVolumeClaim` to ensure data persists across crashes. It securely pulls credentials from a `Secret` and is exposed internally via a `Headless Service` to maintain stable DNS (`mysql-0.mysql.capstone.svc.cluster.local`).
 - **Frontend Tier:** Two `wordpress:latest` replicas managed by a `Deployment`. They dynamically retrieve the DB connection string from a `ConfigMap` and the passwords from the `Secret`. They use `Liveness` and `Readiness` probes to ensure they don't serve traffic until fully booted.
 - **Autoscaling:** A `HorizontalPodAutoscaler` (HPA) monitors the frontend Deployment and scales it up to 10 replicas if CPU utilization exceeds 50%.
