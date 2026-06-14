@@ -55,8 +55,11 @@ They sound similar, but they do two completely different jobs:
 1. **Liveness Probe (The Medic):** It constantly pings `/wp-login.php`. If it gets an error (like a 500 Internal Server Error because PHP crashed), it literally kills the container and restarts it. It is your automatic self-healing mechanism.
 2. **Readiness Probe (The Traffic Cop):** When a pod first boots up, it takes about 20 seconds for Apache and PHP to start. If the Kubernetes Service immediately sends user traffic to it, users will see a "Connection Refused" error. The Readiness Probe checks `/wp-login.php`, and *only* allows the Service to send user traffic to the pod once the probe gets a successful 200 OK HTTP response.
 
-### Why did we add `initialDelaySeconds: 30`?
-Without this delay, Kubernetes would check the Liveness probe at exactly second #1. WordPress wouldn't be booted yet, so the probe would fail. Kubernetes would kill the pod and restart it. Second #1 hits again, it fails again, and it restarts again. You end up in an infinite `CrashLoopBackOff`. The delay gives the container 30 seconds of "grace period" to start up before the medic starts checking its pulse!
+### Why did we add `initialDelaySeconds: 30` (or `60`)?
+When a pod first boots up, it has to unpack its code and connect to the database. Without this delay, Kubernetes would check the Liveness probe at exactly second #1. WordPress wouldn't be booted yet, so the probe would fail. Kubernetes would kill the pod and restart it. Second #1 hits again, it fails again, and it restarts again. You end up in an infinite `CrashLoopBackOff`. The `initialDelaySeconds` tells Kubernetes: *"Do not even start checking the pod until 60 seconds have passed, let it unpack its bags first!"*
+
+### Why did we add `timeoutSeconds: 5`?
+Once Kubernetes knocks on the door (sends the HTTP request to `/wp-login.php`), how long should it wait for WordPress to answer? By default, Kubernetes only waits **1 second**. On a slow local computer (like a Mac running a Docker VM), generating a PHP page might take 1.5 seconds. If the default is 1 second, Kubernetes thinks the app is permanently frozen and murders the pod! By setting it to 5 seconds, we tell Kubernetes: *"Be patient, wait up to 5 seconds for a reply before assuming the pod is dead."*
 
 ---
 

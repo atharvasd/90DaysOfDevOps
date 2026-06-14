@@ -33,7 +33,7 @@ Ten days of Kubernetes — clusters, Pods, Deployments, Services, ConfigMaps, Se
 
 **Verify:** Can you see the `wordpress` database?
 
----
+
 
 ### Task 3: Deploy WordPress (Days 52, 54, 57)
 1. Create a ConfigMap with `WORDPRESS_DB_HOST` set to `mysql-0.mysql.capstone.svc.cluster.local:3306` and `WORDPRESS_DB_NAME`
