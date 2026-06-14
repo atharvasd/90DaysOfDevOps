@@ -40,18 +40,6 @@ graph TD
         
         DBPod --> PVC[(PersistentVolumeClaim<br>data-mysql-0)]
     end
-    
-    classDef svc fill:#f9f,stroke:#333,stroke-width:2px;
-    classDef deploy fill:#bbf,stroke:#333,stroke-width:2px;
-    classDef pod fill:#cfc,stroke:#333,stroke-width:2px;
-    classDef config fill:#fcf,stroke:#333,stroke-width:2px;
-    classDef storage fill:#ffc,stroke:#333,stroke-width:2px;
-    
-    class NodePort,Headless svc;
-    class WPDeploy,DBStateful deploy;
-    class WPPod1,WPPod2,DBPod pod;
-    class ConfigMap,Secret config;
-    class PVC storage;
 ```
 
 - **Database Tier:** A `mysql:8.0` container managed by a `StatefulSet`, bound to a `PersistentVolumeClaim` to ensure data persists across crashes. It securely pulls credentials from a `Secret` and is exposed internally via a `Headless Service` to maintain stable DNS (`mysql-0.mysql.capstone.svc.cluster.local`).
