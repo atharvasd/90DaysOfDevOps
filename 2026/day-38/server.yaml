@@ -1,0 +1,18 @@
+server:
+  name: webserver
+  ip: 10.0.0.1
+  port: 80
+database:
+  host: db.local
+  name: web-db
+  credentials:
+    user: dbadmin
+    password: password
+startup_script: |
+  #!/bin/bash
+  echo "hello"
+  echo "world"
+long_description: >
+  This is a very long description that spans multiple lines.
+  Easy to read.
+  Will be read as single line.

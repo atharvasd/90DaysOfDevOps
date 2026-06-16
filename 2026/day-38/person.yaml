@@ -1,0 +1,11 @@
+name: Bob
+role: Infrastructure Engineer
+experience_years: 3
+learning: false
+tools:
+  - docker
+  - kubernetes
+  - jenkins
+  - terraform
+  - linux
+hobbies: [reading, cooking]
