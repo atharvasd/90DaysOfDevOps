@@ -63,7 +63,7 @@ A day-by-day index of the complete 90-day DevOps challenge. Click any day to jum
 
 ## CI/CD and GitHub Actions (Days 38-49)
 
-- [ ] **[Day 38](day-38/)** — YAML Basics
+- [x] **[Day 38](day-38/)** — YAML Basics
 - [ ] **[Day 39](day-39/)** — What is CI/CD?
 - [ ] **[Day 40](day-40/)** — Your First GitHub Actions Workflow
 - [ ] **[Day 41](day-41/)** — Triggers and Matrix Builds
@@ -89,7 +89,7 @@ A day-by-day index of the complete 90-day DevOps challenge. Click any day to jum
 - [x] **[Day 57](day-57/)** — Resource Requests, Limits, and Probes
 - [x] **[Day 58](day-58/)** — Metrics Server and Horizontal Pod Autoscaler (HPA)
 - [ ] **[Day 59](day-59/)** — Helm -- Kubernetes Package Manager
-- [ ] **[Day 60](day-60/)** — Capstone: Deploy WordPress + MySQL on Kubernetes
+- [x] **[Day 60](day-60/)** — Capstone: Deploy WordPress + MySQL on Kubernetes
 - [ ] **[Advanced](kubernetes-advanced/)** — **Advanced Kubernetes & Security Best Practices** (DaemonSets, Jobs, CronJobs, Security Hardening)
 
 ## TerraWeek -- Terraform (Days 61-67)
