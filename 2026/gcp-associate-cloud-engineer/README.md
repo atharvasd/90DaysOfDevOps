@@ -11,39 +11,39 @@ This directory contains **18 production-style, hands-on labs** designed to prepa
 ### Domain 1 & 5: Setting Up Environment & Access/Security
 | Lab | Topic | File |
 |-----|-------|------|
-| 01 | IAM, Projects, and gcloud CLI Configuration | [lab-01](./lab-01-iam-projects-gcloud-cli.md) |
+| 01 | IAM, Projects, and gcloud CLI Configuration | [lab-01](./lab-01/lab-01-iam-projects-gcloud-cli.md) |
 
 ### Domain 2: Planning and Configuring
 | Lab | Topic | File |
 |-----|-------|------|
-| 02 | Custom VPC Networks and Compute Engine | [lab-02](./lab-02-vpc-networks-compute-engine.md) |
-| 14 | VPC Peering, Shared VPC & Cloud SQL Private IP | [lab-14](./lab-14-vpc-peering-cloud-sql-private.md) |
+| 02 | Custom VPC Networks and Compute Engine | [lab-02](./lab-02/lab-02-vpc-networks-compute-engine.md) |
+| 14 | VPC Peering, Shared VPC & Cloud SQL Private IP | [lab-14](./lab-14/lab-14-vpc-peering-cloud-sql-private.md) |
 
 ### Domain 3: Deploying and Implementing
 | Lab | Topic | File |
 |-----|-------|------|
-| 03 | Google Kubernetes Engine (GKE) Deployments | [lab-03](./lab-03-gke-deployments.md) |
-| 04 | Serverless — Cloud Run & Cloud Functions (2nd Gen) | [lab-04](./lab-04-serverless-cloud-run-functions.md) |
-| 05 | Cloud Storage & Cloud SQL Databases | [lab-05](./lab-05-cloud-storage-cloud-sql.md) |
-| 11 | Cloud Pub/Sub — Asynchronous Messaging | [lab-11](./lab-11-cloud-pubsub-messaging.md) |
-| 12 | Managed Instance Groups, Templates & Autoscaling | [lab-12](./lab-12-managed-instance-groups-autoscaling.md) |
+| 03 | Google Kubernetes Engine (GKE) Deployments | [lab-03](./lab-03/lab-03-gke-deployments.md) |
+| 04 | Serverless — Cloud Run & Cloud Functions (2nd Gen) | [lab-04](./lab-04/lab-04-serverless-cloud-run-functions.md) |
+| 05 | Cloud Storage & Cloud SQL Databases | [lab-05](./lab-05/lab-05-cloud-storage-cloud-sql.md) |
+| 11 | Cloud Pub/Sub — Asynchronous Messaging | [lab-11](./lab-11/lab-11-cloud-pubsub-messaging.md) |
+| 12 | Managed Instance Groups, Templates & Autoscaling | [lab-12](./lab-12/lab-12-managed-instance-groups-autoscaling.md) |
 
 
 ### Domain 4: Ensuring Successful Operation
 | Lab | Topic | File |
 |-----|-------|------|
-| 06 | Cloud Monitoring, Logging & Audit Trails | [lab-06](./lab-06-monitoring-logging-audit.md) |
-| 13 | Snapshots, Custom Images & Disk Management | [lab-13](./lab-13-snapshots-images-disk-management.md) |
-| 16 | GKE Cluster Upgrades & Node Pool Management | [lab-16](./lab-16-gke-upgrades-node-pool-management.md) |
+| 06 | Cloud Monitoring, Logging & Audit Trails | [lab-06](./lab-06/lab-06-monitoring-logging-audit.md) |
+| 13 | Snapshots, Custom Images & Disk Management | [lab-13](./lab-13/lab-13-snapshots-images-disk-management.md) |
+| 16 | GKE Cluster Upgrades & Node Pool Management | [lab-16](./lab-16/lab-16-gke-upgrades-node-pool-management.md) |
 
 ### Advanced: Production GKE & Security
 | Lab | Topic | File |
 |-----|-------|------|
-| 07 | Private GKE Clusters & Cloud NAT | [lab-07](./lab-07-private-gke-cloud-nat.md) |
-| 08 | GKE Workload Identity & Secret Manager | [lab-08](./lab-08-workload-identity-secret-manager.md) |
-| 09 | Cloud Build Pipelines & Artifact Registry | [lab-09](./lab-09-cloud-build-artifact-registry.md) |
-| 10 | GKE Ingress & GCP Load Balancing | [lab-10](./lab-10-gke-ingress-load-balancing.md) |
-| 15 | GKE Network Policies — Pod-to-Pod Isolation | [lab-15](./lab-15-gke-network-policies.md) |
+| 07 | Private GKE Clusters & Cloud NAT | [lab-07](./lab-07/lab-07-private-gke-cloud-nat.md) |
+| 08 | GKE Workload Identity & Secret Manager | [lab-08](./lab-08/lab-08-workload-identity-secret-manager.md) |
+| 09 | Cloud Build Pipelines & Artifact Registry | [lab-09](./lab-09/lab-09-cloud-build-artifact-registry.md) |
+| 10 | GKE Ingress & GCP Load Balancing | [lab-10](./lab-10/lab-10-gke-ingress-load-balancing.md) |
+| 15 | GKE Network Policies — Pod-to-Pod Isolation | [lab-15](./lab-15/lab-15-gke-network-policies.md) |
 
 
 ### 🛡️ Security Best Practices (Production Hardening)

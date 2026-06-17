@@ -25,16 +25,16 @@ VPC (Virtual Private Cloud) networks are the foundation of all networking in GCP
 # Create custom network (no auto subnet generation)
 gcloud compute networks create ace-custom-vpc --subnet-mode=custom
 
-# Create Web Subnet in us-east1
+# Create Web Subnet in asia-south1
 gcloud compute networks subnets create web-subnet \
     --network=ace-custom-vpc \
-    --region=us-east1 \
+    --region=asia-south1 \
     --range=10.0.1.0/24
 
-# Create App Subnet in us-east1
+# Create App Subnet in asia-south1
 gcloud compute networks subnets create app-subnet \
     --network=ace-custom-vpc \
-    --region=us-east1 \
+    --region=asia-south1 \
     --range=10.0.2.0/24
 ```
 
@@ -77,7 +77,7 @@ EOF
 
 # Deploy VM
 gcloud compute instances create web-vm-01 \
-    --zone=us-east1-b \
+    --zone=asia-south1-b \
     --subnet=web-subnet \
     --tags=web-server \
     --metadata-from-file=startup-script=startup.sh \
@@ -90,14 +90,14 @@ gcloud compute instances create web-vm-01 \
 
 ```bash
 # SSH into the VM
-gcloud compute ssh web-vm-01 --zone=us-east1-b
+gcloud compute ssh web-vm-01 --zone=asia-south1-b
 
 # From inside the VM, verify Apache is running
 curl localhost
 
 # From your local machine, test via external IP
 EXTERNAL_IP=$(gcloud compute instances describe web-vm-01 \
-    --zone=us-east1-b --format='value(networkInterfaces[0].accessConfigs[0].natIP)')
+    --zone=asia-south1-b --format='value(networkInterfaces[0].accessConfigs[0].natIP)')
 curl http://$EXTERNAL_IP
 ```
 
@@ -124,8 +124,8 @@ gcloud compute instances list --filter="name=web-vm-01"
 ## 🧹 Cleanup
 
 ```bash
-gcloud compute instances delete web-vm-01 --zone=us-east1-b --quiet
+gcloud compute instances delete web-vm-01 --zone=asia-south1-b --quiet
 gcloud compute firewall-rules delete allow-http-web allow-ssh allow-internal-subnets --quiet
-gcloud compute networks subnets delete web-subnet app-subnet --region=us-east1 --quiet
+gcloud compute networks subnets delete web-subnet app-subnet --region=asia-south1 --quiet
 gcloud compute networks delete ace-custom-vpc --quiet
 ```
