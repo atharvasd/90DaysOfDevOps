@@ -24,13 +24,13 @@ Google Kubernetes Engine (GKE) is Google Cloud's managed Kubernetes service. It 
 ```bash
 # GKE Autopilot (Recommended for production apps)
 gcloud container clusters create-auto ace-autopilot-cluster \
-    --region=us-east1
+    --region=asia-south1
 
 # GKE Standard (For control over node sizes)
 gcloud container clusters create ace-standard-cluster \
     --num-nodes=3 \
     --machine-type=e2-medium \
-    --zone=us-east1-b \
+    --zone=asia-south1-b \
     --enable-ip-alias
 ```
 
@@ -45,7 +45,7 @@ gke-gcloud-auth-plugin --version
 
 # Get credentials for the standard cluster
 gcloud container clusters get-credentials ace-standard-cluster \
-    --zone=us-east1-b
+    --zone=asia-south1-b
 
 # Verify connection
 kubectl cluster-info
@@ -122,6 +122,6 @@ kubectl describe hpa web-app
 ```bash
 kubectl delete service web-app
 kubectl delete deployment web-app
-gcloud container clusters delete ace-standard-cluster --zone=us-east1-b --quiet
-gcloud container clusters delete ace-autopilot-cluster --region=us-east1 --quiet
+gcloud container clusters delete ace-standard-cluster --zone=asia-south1-b --quiet
+gcloud container clusters delete ace-autopilot-cluster --region=asia-south1 --quiet
 ```
